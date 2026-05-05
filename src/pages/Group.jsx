@@ -47,6 +47,11 @@ const Group = () => {
     toast.success('Transacción sincronizada');
   };
 
+  const handleDeleteExpense = (expenseId) => {
+    socket.emit('delete_expense', { code, expenseId });
+    toast.success('Gasto eliminado');
+  };
+
   if (!group) return (
     <div className="app-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <motion.div 
@@ -128,7 +133,7 @@ const Group = () => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <ExpenseList expenses={group.expenses} />
+        <ExpenseList expenses={group.expenses} onDelete={handleDeleteExpense} />
       </div>
 
       <div style={{ height: '8rem' }}></div>

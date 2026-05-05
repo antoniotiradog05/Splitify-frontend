@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Receipt, User, ArrowUpRight, Clock } from 'lucide-react';
+import { Receipt, User, ArrowUpRight, Clock, Trash2 } from 'lucide-react';
 
-const ExpenseList = ({ expenses }) => {
+const ExpenseList = ({ expenses, onDelete }) => {
   if (expenses.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '5rem 2rem' }}>
@@ -45,11 +45,19 @@ const ExpenseList = ({ expenses }) => {
               </div>
             </div>
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>{exp.amount.toFixed(2)}€</div>
-            <div style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', fontWeight: 800, letterSpacing: '0.5px' }}>
-              REPARTIDO: {exp.splitAmong.length} MIEMBROS
+          <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div>
+              <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>{exp.amount.toFixed(2)}€</div>
+              <div style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', fontWeight: 800, letterSpacing: '0.5px' }}>
+                REPARTIDO: {exp.splitAmong.length} MIEMBROS
+              </div>
             </div>
+            <button 
+              onClick={() => onDelete(exp._id)}
+              style={{ background: 'rgba(255,59,48,0.1)', color: '#FF3B30', border: 'none', padding: '0.5rem', borderRadius: '10px' }}
+            >
+              <Trash2 size={16} />
+            </button>
           </div>
         </motion.div>
       ))}

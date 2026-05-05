@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Plus, Users, ArrowRight, Wallet, Sparkles } from 'lucide-react';
@@ -9,6 +9,14 @@ const Home = () => {
   const [userName, setUserName] = useState('');
   const [joinCode, setJoinCode] = useState('');
   const [isJoining, setIsJoining] = useState(false);
+  const [lastGroup, setLastGroup] = useState(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('last_session');
+    if (saved) {
+      setLastGroup(JSON.parse(saved));
+    }
+  }, []);
   const navigate = useNavigate();
 
   const containerVariants = {
@@ -39,6 +47,7 @@ const Home = () => {
       
       if (res.ok) {
         localStorage.setItem(`user_${data.code}`, userName);
+        localStorage.setItem('last_session', JSON.stringify({ code: data.code, name: groupName, user: userName }));
         navigate(`/group/${data.code}`);
       } else {
         toast.error(data.error);
@@ -51,8 +60,14 @@ const Home = () => {
   const handleJoinGroup = (e) => {
     e.preventDefault();
     if (!joinCode || !userName) return toast.error('Rellena tu nombre y el código');
-    localStorage.setItem(`user_${joinCode.toUpperCase()}`, userName);
-    navigate(`/group/${joinCode.toUpperCase()}`);
+    const code = joinCode.toUpperCase();
+    localStorage.setItem(`user_${code}`, userName);
+    localStorage.setItem('last_session', JSON.stringify({ code: code, name: 'Grupo Reciente', user: userName }));
+    navigate(`/group/${code}`);
+  };
+
+  const handleContinue = () => {
+    navigate(`/group/${lastGroup.code}`);
   };
 
   return (
@@ -88,6 +103,26 @@ const Home = () => {
       </header>
 
       <motion.div variants={itemVariants} className="luxury-card">
+        {lastGroup && !isJoining && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ 
+              background: 'var(--bg-elevated)', padding: '1rem', borderRadius: '16px', 
+              marginBottom: '2rem', border: '1px solid var(--border-bright)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+            }}
+          >
+            <div>
+              <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>SESIÓN ACTIVA</p>
+              <p style={{ fontSize: '0.9rem', fontWeight: 700 }}>{lastGroup.name}</p>
+            </div>
+            <button onClick={handleContinue} className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
+              Continuar
+            </button>
+          </motion.div>
+        )}
+
         <div style={{ 
           display: 'flex', background: 'var(--bg-deep)', 
           padding: '6px', borderRadius: '18px', marginBottom: '2.5rem' 

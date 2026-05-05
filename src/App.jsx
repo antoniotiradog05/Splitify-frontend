@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Group from './pages/Group';
 import Summary from './pages/Summary';
 import { Toaster } from 'react-hot-toast';
+import InstallPWA from './components/InstallPWA';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
             }
           }}
         />
+        <InstallPWA />
       </div>
     </Router>
   );

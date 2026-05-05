@@ -57,6 +57,32 @@ const Summary = () => {
       </header>
 
       <div style={{ padding: '1rem 0' }}>
+        <div className="luxury-card" style={{ marginBottom: '1.5rem', background: 'var(--bg-deep)' }}>
+          <h4 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase' }}>Estado de Cuentas</h4>
+          {group.members.map(member => {
+            const spent = group.expenses.filter(e => e.paidBy === member).reduce((acc, curr) => acc + curr.amount, 0);
+            const shouldHavePaid = group.expenses.reduce((acc, curr) => {
+              if (curr.splitAmong.includes(member)) {
+                return acc + (curr.amount / curr.splitAmong.length);
+              }
+              return acc;
+            }, 0);
+            const bal = spent - shouldHavePaid;
+
+            return (
+              <div key={member} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <span style={{ fontWeight: 600 }}>{member}</span>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ color: bal >= 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)', fontWeight: 700 }}>
+                    {bal >= 0 ? '+' : ''}{bal.toFixed(2)}€
+                  </div>
+                  <div style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)' }}>HA GASTADO {spent.toFixed(2)}€</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         <div className="luxury-card" style={{ borderTop: '4px solid var(--primary)', background: 'linear-gradient(to bottom, #1a1e26, #161920)' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ 
