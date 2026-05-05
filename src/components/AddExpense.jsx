@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Euro, Check, CreditCard, Calendar } from 'lucide-react';
+import { X, Euro, Check, CreditCard, Calendar, ArrowRight } from 'lucide-react';
 
-const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [paidBy, setPaidBy] = useState(currentUser);
-  const [splitAmong, setSplitAmong] = useState([...members]);
-  const [category, setCategory] = useState('otros');
+const AddExpense = ({ members, onClose, onAdd, currentUser, editData }) => {
+  const [description, setDescription] = useState(editData ? editData.description : '');
+  const [amount, setAmount] = useState(editData ? editData.amount.toString() : '');
+  const [paidBy, setPaidBy] = useState(editData ? editData.paidBy : currentUser);
+  const [splitAmong, setSplitAmong] = useState(editData ? [...editData.splitAmong] : [...members]);
+  const [category, setCategory] = useState(editData ? editData.category : 'otros');
 
   const categories = [
     { id: 'comida', label: 'Comida', icon: '🍕' },
@@ -61,8 +61,8 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
           <div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Nueva Transacción</h2>
-            <p style={{ color: 'var(--text-tertiary)', fontSize: '0.8rem' }}>Todos los campos son obligatorios para la sincronización.</p>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{editData ? 'Editar Transacción' : 'Nueva Transacción'}</h2>
+            <p style={{ color: 'var(--text-tertiary)', fontSize: '0.8rem' }}>{editData ? 'Modifica los detalles del gasto.' : 'Todos los campos son obligatorios para la sincronización.'}</p>
           </div>
           <button className="btn btn-secondary" onClick={onClose} style={{ padding: '0.6rem', borderRadius: '12px' }}>
             <X size={24} />
@@ -169,7 +169,7 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
           </div>
 
           <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1.25rem', borderRadius: '18px' }}>
-            <CreditCard size={20} /> Confirmar Transacción
+            {editData ? 'Guardar Cambios' : 'Sincronizar Gasto'} <ArrowRight size={20} />
           </button>
         </form>
       </motion.div>

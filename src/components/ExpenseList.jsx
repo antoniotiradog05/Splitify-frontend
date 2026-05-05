@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Receipt, User, ArrowUpRight, Clock, Trash2 } from 'lucide-react';
+import { Receipt, User, ArrowUpRight, Clock, Trash2, Edit2 } from 'lucide-react';
 
-const ExpenseList = ({ expenses, onDelete }) => {
+const ExpenseList = ({ expenses, onDelete, onEdit }) => {
   if (expenses.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '5rem 2rem' }}>
@@ -55,6 +55,12 @@ const ExpenseList = ({ expenses, onDelete }) => {
                 REPARTIDO: {exp.splitAmong.length} MIEMBROS
               </div>
             </div>
+            <button 
+              onClick={() => onEdit(exp)}
+              style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-secondary)', border: 'none', padding: '0.5rem', borderRadius: '10px' }}
+            >
+              <Edit2 size={16} />
+            </button>
             <button 
               onClick={() => onDelete(exp._id)}
               style={{ background: 'rgba(255,59,48,0.1)', color: '#FF3B30', border: 'none', padding: '0.5rem', borderRadius: '10px' }}

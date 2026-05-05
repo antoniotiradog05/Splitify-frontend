@@ -15,6 +15,7 @@ const Group = () => {
   const navigate = useNavigate();
   const [group, setGroup] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingExpense, setEditingExpense] = useState(null);
   const [showQR, setShowQR] = useState(false);
   const [userName] = useState(localStorage.getItem(`user_${code}`));
 
@@ -42,9 +43,20 @@ const Group = () => {
   }, [code, userName, navigate]);
 
   const handleAddExpense = (expenseData) => {
-    socket.emit('add_expense', { code, ...expenseData });
+    if (editingExpense) {
+      socket.emit('edit_expense', { code, expenseId: editingExpense._id, updatedData: expenseData });
+      setEditingExpense(null);
+      toast.success('Transacción actualizada');
+    } else {
+      socket.emit('add_expense', { code, ...expenseData });
+      toast.success('Transacción sincronizada');
+    }
     setShowAddModal(false);
-    toast.success('Transacción sincronizada');
+  };
+
+  const handleEditExpense = (expense) => {
+    setEditingExpense(expense);
+    setShowAddModal(true);
   };
 
   const handleDeleteExpense = (expenseId) => {
@@ -133,7 +145,7 @@ const Group = () => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <ExpenseList expenses={group.expenses} onDelete={handleDeleteExpense} />
+        <ExpenseList expenses={group.expenses} onDelete={handleDeleteExpense} onEdit={handleEditExpense} />
       </div>
 
       <div style={{ height: '8rem' }}></div>
@@ -155,10 +167,14 @@ const Group = () => {
       <AnimatePresence>
         {showAddModal && (
           <AddExpense 
-            members={group.members} 
-            onClose={() => setShowAddModal(false)} 
-            onAdd={handleAddExpense} 
+            onClose={() => {
+              setShowAddModal(false);
+              setEditingExpense(null);
+            }} 
+            onAdd={handleAddExpense}
+            members={group.members}
             currentUser={userName}
+            editData={editingExpense}
           />
         )}
         {showQR && (
