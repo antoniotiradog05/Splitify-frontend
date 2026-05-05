@@ -41,6 +41,18 @@ const Summary = () => {
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   };
 
+  const handleMarkAsPaid = (s) => {
+    socket.emit('add_expense', {
+      code,
+      description: `Liquidación: ${s.from} ➔ ${s.to}`,
+      amount: s.amount,
+      paidBy: s.from,
+      splitAmong: [s.to],
+      category: 'ocio' // Usamos ocio por ahora como fallback
+    });
+    toast.success(`Pago de ${s.from} a ${s.to} registrado`);
+  };
+
   if (!group) return <div className="app-container">Loading protocol...</div>;
 
   return (
@@ -129,6 +141,13 @@ const Summary = () => {
                     <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--primary)' }}>{s.amount}€</div>
                     <div style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', fontWeight: 800 }}>A {s.to.toUpperCase()}</div>
                   </div>
+                  <button 
+                    onClick={() => handleMarkAsPaid(s)}
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-bright)', borderRadius: '12px', padding: '0.5rem', color: 'var(--accent-emerald)' }}
+                    title="Marcar como pagado"
+                  >
+                    <CheckCircle size={20} />
+                  </button>
                 </motion.div>
               ))}
             </div>

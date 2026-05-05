@@ -34,9 +34,12 @@ const ExpenseList = ({ expenses, onDelete }) => {
             <div style={{ 
               width: '44px', height: '44px', background: 'var(--bg-elevated)', borderRadius: '12px',
               display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)',
-              border: '1px solid var(--border-subtle)'
+              border: '1px solid var(--border-subtle)', fontSize: '1.2rem'
             }}>
-              <ArrowUpRight size={20} />
+              {exp.category === 'comida' ? '🍕' : 
+               exp.category === 'transporte' ? '🚗' : 
+               exp.category === 'ocio' ? '🍹' : 
+               exp.category === 'casa' ? '🏠' : '📦'}
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '1rem', color: 'white' }}>{exp.description}</div>

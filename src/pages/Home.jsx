@@ -190,7 +190,12 @@ const Home = () => {
                   type="text" 
                   placeholder="X7Y2Z9" 
                   value={joinCode}
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                  onChange={(e) => {
+                    const code = e.target.value.toUpperCase();
+                    setJoinCode(code);
+                    const savedUser = localStorage.getItem(`user_${code}`);
+                    if (savedUser) setUserName(savedUser);
+                  }}
                   style={{ letterSpacing: '4px', fontWeight: 800, textAlign: 'center' }}
                 />
               </div>

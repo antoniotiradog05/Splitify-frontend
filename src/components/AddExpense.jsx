@@ -7,6 +7,15 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
   const [amount, setAmount] = useState('');
   const [paidBy, setPaidBy] = useState(currentUser);
   const [splitAmong, setSplitAmong] = useState([...members]);
+  const [category, setCategory] = useState('otros');
+
+  const categories = [
+    { id: 'comida', label: 'Comida', icon: '🍕' },
+    { id: 'transporte', label: 'Transporte', icon: '🚗' },
+    { id: 'ocio', label: 'Ocio', icon: '🍹' },
+    { id: 'casa', label: 'Casa', icon: '🏠' },
+    { id: 'otros', label: 'Otros', icon: '📦' }
+  ];
 
   const toggleMember = (member) => {
     if (splitAmong.includes(member)) {
@@ -23,7 +32,8 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
       description,
       amount: parseFloat(amount),
       paidBy,
-      splitAmong
+      splitAmong,
+      category
     });
   };
 
@@ -85,6 +95,27 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
                 onChange={(e) => setAmount(e.target.value)}
                 style={{ fontSize: '1.5rem', fontWeight: 800 }}
               />
+            </div>
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>CATEGORÍA</label>
+            <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }} className="no-scrollbar">
+              {categories.map(cat => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setCategory(cat.id)}
+                  style={{ 
+                    padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid',
+                    whiteSpace: 'nowrap', fontSize: '0.8rem',
+                    background: category === cat.id ? 'var(--primary)' : 'var(--bg-elevated)',
+                    borderColor: category === cat.id ? 'var(--primary)' : 'var(--border-subtle)',
+                    color: category === cat.id ? 'white' : 'var(--text-secondary)'
+                  }}
+                >
+                  {cat.icon} {cat.label}
+                </button>
+              ))}
             </div>
           </div>
 
