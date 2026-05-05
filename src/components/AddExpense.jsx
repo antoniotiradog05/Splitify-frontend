@@ -51,8 +51,8 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
           <div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>New Transaction</h2>
-            <p style={{ color: 'var(--text-tertiary)', fontSize: '0.8rem' }}>All fields are mandatory for synchronization.</p>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Nueva Transacción</h2>
+            <p style={{ color: 'var(--text-tertiary)', fontSize: '0.8rem' }}>Todos los campos son obligatorios para la sincronización.</p>
           </div>
           <button className="btn btn-secondary" onClick={onClose} style={{ padding: '0.6rem', borderRadius: '12px' }}>
             <X size={24} />
@@ -61,11 +61,11 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>DESCRIPTION</label>
+            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>DESCRIPCIÓN</label>
             <div className="modern-input-wrapper">
               <input 
                 type="text" 
-                placeholder="What was this for?" 
+                placeholder="¿En qué se gastó?" 
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 autoFocus
@@ -74,7 +74,7 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>AMOUNT (€)</label>
+            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>IMPORTE (€)</label>
             <div className="modern-input-wrapper" style={{ display: 'flex', alignItems: 'center' }}>
               <div style={{ padding: '0 1rem', color: 'var(--primary)' }}><Euro size={20} /></div>
               <input 
@@ -90,7 +90,7 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
             <div>
-              <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>SOURCE</label>
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>PAGADO POR</label>
               <div className="modern-input-wrapper">
                 <select 
                   value={paidBy} 
@@ -105,15 +105,15 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
               </div>
             </div>
             <div>
-              <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>SPLIT WITH</label>
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>DIVIDIR CON</label>
               <div style={{ padding: '12px', background: 'var(--bg-deep)', borderRadius: '16px', textAlign: 'center', fontSize: '0.9rem', fontWeight: 700 }}>
-                {splitAmong.length} Members
+                {splitAmong.length} Miembros
               </div>
             </div>
           </div>
 
           <div style={{ marginBottom: '2.5rem' }}>
-            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>SELECT BENEFICIARIES</label>
+            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>SELECCIONAR BENEFICIARIOS</label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
               {members.map(m => (
                 <button
@@ -138,7 +138,7 @@ const AddExpense = ({ members, onClose, onAdd, currentUser }) => {
           </div>
 
           <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1.25rem', borderRadius: '18px' }}>
-            <CreditCard size={20} /> Commit Transaction
+            <CreditCard size={20} /> Confirmar Transacción
           </button>
         </form>
       </motion.div>

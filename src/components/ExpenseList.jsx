@@ -13,8 +13,8 @@ const ExpenseList = ({ expenses }) => {
         >
           <Receipt size={32} color="var(--text-tertiary)" />
         </motion.div>
-        <p style={{ fontWeight: 700, color: 'white' }}>No transaction history</p>
-        <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>Your decentralized group ledger is currently empty.</p>
+        <p style={{ fontWeight: 700, color: 'white' }}>Sin historial de transacciones</p>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>El libro de cuentas de tu grupo está actualmente vacío.</p>
       </div>
     );
   }
@@ -48,7 +48,7 @@ const ExpenseList = ({ expenses }) => {
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>{exp.amount.toFixed(2)}€</div>
             <div style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', fontWeight: 800, letterSpacing: '0.5px' }}>
-              DISTRIBUTED: {exp.splitAmong.length} MEMBERS
+              REPARTIDO: {exp.splitAmong.length} MIEMBROS
             </div>
           </div>
         </motion.div>

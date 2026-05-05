@@ -29,12 +29,12 @@ const Summary = () => {
 
   const handleShare = () => {
     if (!group) return;
-    let message = `💎 *SPLITIFY EXECUTIVE SUMMARY: ${group.name}*\n\n`;
+    let message = `💎 *RESUMEN EJECUTIVO SPLITIFY: ${group.name}*\n\n`;
     if (settlements.length === 0) {
-      message += "All accounts balanced. Zero liabilities. 🎉";
+      message += "Cuentas equilibradas. Sin deudas pendientes. 🎉";
     } else {
       settlements.forEach(s => {
-        message += `🔹 *${s.from}* pays *${s.to}*: ${s.amount}€\n`;
+        message += `🔹 *${s.from}* paga a *${s.to}*: ${s.amount}€\n`;
       });
     }
     message += `\nSecure Access: ${window.location.origin}/group/${code}`;
@@ -53,7 +53,7 @@ const Summary = () => {
         <button className="btn btn-secondary" onClick={() => navigate(`/group/${code}`)} style={{ padding: '0.6rem' }}>
           <ArrowLeft size={20} />
         </button>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>Settlement Protocol</h2>
+        <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>Protocolo de Liquidación</h2>
       </header>
 
       <div style={{ padding: '1rem 0' }}>
@@ -67,15 +67,15 @@ const Summary = () => {
             }}>
               <TrendingUp size={24} color="var(--primary)" />
             </div>
-            <h3 style={{ fontSize: '1.2rem', color: 'white' }}>Suggested Transactions</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Optimization complete. Minimum payments found.</p>
+            <h3 style={{ fontSize: '1.2rem', color: 'white' }}>Transacciones Sugeridas</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Optimización completada. Pagos mínimos calculados.</p>
           </div>
           
           {settlements.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem 0' }}>
               <CheckCircle size={64} color="var(--success)" style={{ opacity: 0.5, marginBottom: '1rem' }} />
-              <p style={{ fontWeight: 700 }}>System Balanced</p>
-              <p style={{ color: 'var(--text-tertiary)', fontSize: '0.8rem' }}>No further actions required.</p>
+              <p style={{ fontWeight: 700 }}>Sistema Equilibrado</p>
+              <p style={{ color: 'var(--text-tertiary)', fontSize: '0.8rem' }}>No se requieren más acciones.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -92,7 +92,7 @@ const Summary = () => {
                   }}
                 >
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', fontWeight: 800 }}>DEBTOR</div>
+                    <div style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', fontWeight: 800 }}>DEUDOR</div>
                     <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{s.from}</div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -101,7 +101,7 @@ const Summary = () => {
                   </div>
                   <div style={{ flex: 1, textAlign: 'right' }}>
                     <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--primary)' }}>{s.amount}€</div>
-                    <div style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', fontWeight: 800 }}>TO {s.to.toUpperCase()}</div>
+                    <div style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', fontWeight: 800 }}>A {s.to.toUpperCase()}</div>
                   </div>
                 </motion.div>
               ))}
@@ -116,10 +116,10 @@ const Summary = () => {
           onClick={handleShare} 
           style={{ background: '#25D366', color: 'white', padding: '1.25rem', boxShadow: '0 10px 20px rgba(37, 211, 102, 0.2)' }}
         >
-          <MessageCircle size={22} /> Share via WhatsApp
+          <MessageCircle size={22} /> Compartir por WhatsApp
         </button>
         <button className="btn btn-secondary" onClick={() => navigate(`/group/${code}`)} style={{ padding: '1rem' }}>
-          Dismiss Protocol
+          Volver al Grupo
         </button>
       </div>
     </motion.div>

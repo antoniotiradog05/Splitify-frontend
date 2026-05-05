@@ -83,7 +83,7 @@ const Home = () => {
           Splitify
         </motion.h1>
         <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', marginTop: '1rem' }}>
-          Finance shared with elegance.
+          Finanzas compartidas con elegancia.
         </motion.p>
       </header>
 
@@ -102,7 +102,7 @@ const Home = () => {
               fontSize: '0.9rem'
             }}
           >
-            Create Group
+            Crear Grupo
           </button>
           <button 
             className="btn"
@@ -114,25 +114,25 @@ const Home = () => {
               fontSize: '0.9rem'
             }}
           >
-            Join Existing
+            Unirme a uno
           </button>
         </div>
 
         {!isJoining ? (
           <form onSubmit={handleCreateGroup}>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>GROUP NAME</label>
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>NOMBRE DEL GRUPO</label>
               <div className="modern-input-wrapper">
                 <input 
                   type="text" 
-                  placeholder="The Weekend Trip" 
+                  placeholder="Cena de Navidad, Viaje..." 
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
                 />
               </div>
             </div>
             <div style={{ marginBottom: '2rem' }}>
-              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>YOUR NAME</label>
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>TU NOMBRE</label>
               <div className="modern-input-wrapper">
                 <input 
                   type="text" 
@@ -143,13 +143,13 @@ const Home = () => {
               </div>
             </div>
             <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1.25rem' }}>
-              Initialize Experience <ArrowRight size={20} />
+              Iniciar Experiencia <ArrowRight size={20} />
             </button>
           </form>
         ) : (
           <form onSubmit={handleJoinGroup}>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>ACCESS CODE</label>
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>CÓDIGO DE ACCESO</label>
               <div className="modern-input-wrapper">
                 <input 
                   type="text" 
@@ -161,7 +161,7 @@ const Home = () => {
               </div>
             </div>
             <div style={{ marginBottom: '2rem' }}>
-              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>YOUR NAME</label>
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '0.5rem', display: 'block' }}>TU NOMBRE</label>
               <div className="modern-input-wrapper">
                 <input 
                   type="text" 
@@ -172,7 +172,7 @@ const Home = () => {
               </div>
             </div>
             <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1.25rem' }}>
-              Access Group <ArrowRight size={20} />
+              Acceder al Grupo <ArrowRight size={20} />
             </button>
           </form>
         )}
@@ -182,7 +182,7 @@ const Home = () => {
         variants={itemVariants}
         style={{ marginTop: 'auto', padding: '3rem 0', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '0.75rem' }}
       >
-        <p>ENCRYPTED END-TO-END • ZERO REGISTRATION • SPLITIFY OS v4.0</p>
+        <p>ENCRIPTACIÓN PUNTA A PUNTA • SIN REGISTROS • SPLITIFY OS v4.0</p>
       </motion.footer>
     </motion.div>
   );

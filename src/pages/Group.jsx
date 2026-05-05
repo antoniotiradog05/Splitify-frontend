@@ -44,7 +44,7 @@ const Group = () => {
   const handleAddExpense = (expenseData) => {
     socket.emit('add_expense', { code, ...expenseData });
     setShowAddModal(false);
-    toast.success('Transaction synchronized');
+    toast.success('Transacción sincronizada');
   };
 
   if (!group) return (
@@ -71,7 +71,7 @@ const Group = () => {
         </button>
         <div style={{ textAlign: 'center' }}>
           <h2 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>{group.name}</h2>
-          <div style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 700 }}>LIVE SYNC ENABLED</div>
+          <div style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 700 }}>SINCRONIZACIÓN ACTIVA</div>
         </div>
         <button className="btn btn-secondary" onClick={() => setShowQR(true)} style={{ padding: '0.6rem', borderRadius: '12px' }}>
           <Share2 size={20} />
@@ -92,7 +92,7 @@ const Group = () => {
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>Aggregate Spending</p>
+                <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>Gasto Total del Grupo</p>
                 <h1 style={{ fontSize: '3rem', fontWeight: 800, margin: '0.2rem 0', color: 'white' }}>{totalSpent.toFixed(2)}€</h1>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem', borderRadius: '12px' }}>
@@ -102,11 +102,11 @@ const Group = () => {
             
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
               <div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', padding: '0.75rem', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.6)' }}>ACTIVE MEMBERS</p>
+                <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.6)' }}>MIEMBROS ACTIVOS</p>
                 <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{group.members.length}</p>
               </div>
               <div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', padding: '0.75rem', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.6)' }}>GROUP ID</p>
+                <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.6)' }}>ID DEL GRUPO</p>
                 <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{group.code}</p>
               </div>
             </div>
@@ -115,7 +115,7 @@ const Group = () => {
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '1rem 0' }}>
-        <h3 style={{ fontSize: '0.8rem' }}>TRANSACTION LOG</h3>
+        <h3 style={{ fontSize: '0.8rem' }}>HISTORIAL DE TRANSACCIONES</h3>
         <motion.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -123,7 +123,7 @@ const Group = () => {
           onClick={() => setShowAddModal(true)} 
           style={{ padding: '0.6rem 1.2rem', fontSize: '0.8rem', borderRadius: '14px' }}
         >
-          <Plus size={16} /> New Transaction
+          <Plus size={16} /> Nuevo Gasto
         </motion.button>
       </div>
 
@@ -143,7 +143,7 @@ const Group = () => {
           }}
           onClick={() => navigate(`/group/${code}/summary`)}
         >
-          <Calculator size={22} /> Execute Settlement
+          <Calculator size={22} /> Liquidar Cuentas
         </button>
       </div>
 

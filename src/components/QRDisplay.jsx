@@ -11,7 +11,7 @@ const QRDisplay = ({ code, groupName, onClose }) => {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(joinUrl);
     setCopied(true);
-    toast.success('Access link copied');
+    toast.success('Enlace de acceso copiado');
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -35,9 +35,9 @@ const QRDisplay = ({ code, groupName, onClose }) => {
         <div style={{ color: 'var(--primary)', marginBottom: '1rem' }}>
           <ShieldCheck size={48} style={{ margin: '0 auto' }} />
         </div>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Group Access Protocol</h2>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Protocolo de Acceso</h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '2.5rem' }}>
-          Scan the encrypted key or share the unique access link to join <strong>{groupName}</strong>.
+          Escanea el código o comparte el enlace único para unirte a <strong>{groupName}</strong>.
         </p>
 
         <div style={{ 
@@ -59,13 +59,13 @@ const QRDisplay = ({ code, groupName, onClose }) => {
           marginBottom: '2.5rem',
           border: '1px solid var(--border-bright)'
         }}>
-          <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem' }}>CRYPTO ACCESS KEY</div>
+          <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '0.5rem' }}>CLAVE DE ACCESO</div>
           <div style={{ fontSize: '2rem', fontWeight: 900, letterSpacing: '6px', color: 'var(--primary)' }}>{code}</div>
         </div>
 
         <button className="btn btn-primary" onClick={copyToClipboard} style={{ width: '100%', padding: '1.1rem', borderRadius: '18px' }}>
           {copied ? <Check size={20} /> : <Copy size={20} />}
-          {copied ? 'LINK COPIED' : 'COPY ACCESS LINK'}
+          {copied ? 'ENLACE COPIADO' : 'COPIAR ENLACE DE ACCESO'}
         </button>
       </motion.div>
     </div>
