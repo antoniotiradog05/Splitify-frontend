@@ -17,6 +17,7 @@ const Group = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
   const [showQR, setShowQR] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [userName] = useState(localStorage.getItem(`user_${code}`));
 
   useEffect(() => {
@@ -144,8 +145,24 @@ const Group = () => {
         </motion.button>
       </div>
 
+      <div style={{ marginBottom: '1.5rem' }}>
+        <div className="modern-input-wrapper" style={{ padding: '0.2rem 1rem' }}>
+          <input 
+            type="text" 
+            placeholder="Buscar gasto..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ fontSize: '0.9rem' }}
+          />
+        </div>
+      </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <ExpenseList expenses={group.expenses} onDelete={handleDeleteExpense} onEdit={handleEditExpense} />
+        <ExpenseList 
+          expenses={group.expenses.filter(e => e.description.toLowerCase().includes(searchTerm.toLowerCase()))} 
+          onDelete={handleDeleteExpense} 
+          onEdit={handleEditExpense} 
+        />
       </div>
 
       <div style={{ height: '8rem' }}></div>

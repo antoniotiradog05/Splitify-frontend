@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MessageCircle, Send, CheckCircle, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Share2, CheckCircle, PieChart as PieIcon, TrendingUp } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import toast from 'react-hot-toast';
 
 const socket = io(import.meta.env.VITE_API_URL);
@@ -55,6 +56,19 @@ const Summary = () => {
 
   if (!group) return <div className="app-container">Loading protocol...</div>;
 
+  const categoryTotals = group.expenses.reduce((acc, curr) => {
+    const cat = curr.category || 'otros';
+    acc[cat] = (acc[cat] || 0) + curr.amount;
+    return acc;
+  }, {});
+
+  const chartData = Object.entries(categoryTotals).map(([name, value]) => ({
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    value
+  }));
+
+  const COLORS = ['#6366f1', '#d946ef', '#f59e0b', '#10b981', '#64748b'];
+
   return (
     <motion.div 
       initial={{ opacity: 0, x: 20 }}
@@ -69,6 +83,43 @@ const Summary = () => {
       </header>
 
       <div style={{ padding: '1rem 0' }}>
+        <div className="luxury-card" style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
+          <h4 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <TrendingUp size={16} /> Distribución de Gastos
+          </h4>
+          <div style={{ height: '200px', width: '100%' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-bright)', borderRadius: '12px' }}
+                  itemStyle={{ color: 'white' }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginTop: '1rem' }}>
+            {chartData.map((entry, index) => (
+              <div key={entry.name} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.7rem' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: COLORS[index % COLORS.length] }}></div>
+                <span style={{ color: 'var(--text-secondary)' }}>{entry.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="luxury-card" style={{ marginBottom: '1.5rem', background: 'var(--bg-deep)' }}>
           <h4 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase' }}>Estado de Cuentas</h4>
           {group.members.map(member => {
