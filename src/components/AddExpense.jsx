@@ -8,6 +8,8 @@ const AddExpense = ({ members, onClose, onAdd, currentUser, editData }) => {
   const [paidBy, setPaidBy] = useState(editData ? editData.paidBy : currentUser);
   const [splitAmong, setSplitAmong] = useState(editData ? [...editData.splitAmong] : [...members]);
   const [category, setCategory] = useState(editData ? editData.category : 'otros');
+  const [isCustom, setIsCustom] = useState(editData && editData.customAmounts ? true : false);
+  const [customAmounts, setCustomAmounts] = useState(editData ? { ...editData.customAmounts } : {});
 
   const categories = [
     { id: 'comida', label: 'Comida', icon: '🍕' },
@@ -28,12 +30,20 @@ const AddExpense = ({ members, onClose, onAdd, currentUser, editData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!description || !amount || splitAmong.length === 0) return;
+    if (isCustom) {
+      const totalCustom = Object.values(customAmounts).reduce((a, b) => a + b, 0);
+      if (Math.abs(totalCustom - parseFloat(amount)) > 0.01) {
+        return toast.error('La suma de importes no coincide con el total');
+      }
+    }
+
     onAdd({
       description,
       amount: parseFloat(amount),
       paidBy,
       splitAmong,
-      category
+      category,
+      customAmounts: isCustom ? customAmounts : null
     });
   };
 
@@ -119,7 +129,59 @@ const AddExpense = ({ members, onClose, onAdd, currentUser, editData }) => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800 }}>¿QUIÉN PAGA Y CUÁNTO?</label>
+              <button 
+                type="button"
+                onClick={() => setIsCustom(!isCustom)}
+                style={{ background: 'transparent', border: 'none', color: isCustom ? 'var(--primary)' : 'var(--text-tertiary)', fontSize: '0.7rem', fontWeight: 800 }}
+              >
+                {isCustom ? '✓ REPARTO PERSONALIZADO' : '+ PERSONALIZAR'}
+              </button>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '0.8rem' }}>
+              {members.map(member => (
+                <div 
+                  key={member}
+                  style={{ 
+                    padding: '0.8rem', borderRadius: '14px', border: '1px solid',
+                    background: splitAmong.includes(member) ? 'rgba(99, 102, 241, 0.05)' : 'transparent',
+                    borderColor: splitAmong.includes(member) ? 'var(--primary)' : 'var(--border-subtle)',
+                    display: 'flex', flexDirection: 'column', gap: '8px'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => toggleMember(member)}>
+                    <div style={{ 
+                      width: '18px', height: '18px', borderRadius: '4px', border: '2px solid',
+                      borderColor: splitAmong.includes(member) ? 'var(--primary)' : 'var(--text-tertiary)',
+                      background: splitAmong.includes(member) ? 'var(--primary)' : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}>
+                      {splitAmong.includes(member) && <Check size={12} color="white" />}
+                    </div>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: splitAmong.includes(member) ? 'white' : 'var(--text-secondary)' }}>{member}</span>
+                  </div>
+                  
+                  {isCustom && splitAmong.includes(member) && (
+                    <input 
+                      type="number"
+                      placeholder="0.00"
+                      value={customAmounts[member] || ''}
+                      onChange={(e) => setCustomAmounts({ ...customAmounts, [member]: parseFloat(e.target.value) || 0 })}
+                      style={{ 
+                        background: 'var(--bg-deep)', border: '1px solid var(--border-bright)', 
+                        borderRadius: '8px', padding: '4px 8px', color: 'white', fontSize: '0.8rem', width: '100%'
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2.5rem' }}>
             <div>
               <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>PAGADO POR</label>
               <div className="modern-input-wrapper">
@@ -136,35 +198,10 @@ const AddExpense = ({ members, onClose, onAdd, currentUser, editData }) => {
               </div>
             </div>
             <div>
-              <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>DIVIDIR CON</label>
-              <div style={{ padding: '12px', background: 'var(--bg-deep)', borderRadius: '16px', textAlign: 'center', fontSize: '0.9rem', fontWeight: 700 }}>
-                {splitAmong.length} Miembros
+              <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>BENEFICIARIOS</label>
+              <div style={{ padding: '12px', background: 'var(--bg-deep)', borderRadius: '16px', textAlign: 'center', fontSize: '1rem', fontWeight: 800 }}>
+                {splitAmong.length} MIEMBROS
               </div>
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '2.5rem' }}>
-            <label style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 800, marginBottom: '0.6rem', display: 'block' }}>SELECCIONAR BENEFICIARIOS</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
-              {members.map(m => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => toggleMember(m)}
-                  className="btn"
-                  style={{ 
-                    padding: '0.6rem 1.2rem',
-                    fontSize: '0.8rem',
-                    borderRadius: '14px',
-                    background: splitAmong.includes(m) ? 'var(--primary)' : 'var(--bg-elevated)',
-                    color: splitAmong.includes(m) ? 'white' : 'var(--text-secondary)',
-                    border: '1px solid',
-                    borderColor: splitAmong.includes(m) ? 'var(--primary)' : 'var(--border-subtle)'
-                  }}
-                >
-                  {m}
-                </button>
-              ))}
             </div>
           </div>
 
