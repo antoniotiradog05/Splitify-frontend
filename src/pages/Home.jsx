@@ -9,12 +9,12 @@ const Home = () => {
   const [userName, setUserName] = useState('');
   const [joinCode, setJoinCode] = useState('');
   const [isJoining, setIsJoining] = useState(false);
-  const [lastGroup, setLastGroup] = useState(null);
+  const [recentGroups, setRecentGroups] = useState([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('last_session');
+    const saved = localStorage.getItem('recent_groups');
     if (saved) {
-      setLastGroup(JSON.parse(saved));
+      setRecentGroups(JSON.parse(saved));
     }
   }, []);
   const navigate = useNavigate();
@@ -47,7 +47,9 @@ const Home = () => {
       
       if (res.ok) {
         localStorage.setItem(`user_${data.code}`, userName);
-        localStorage.setItem('last_session', JSON.stringify({ code: data.code, name: groupName, user: userName }));
+        const newGroup = { code: data.code, name: groupName, user: userName };
+        const updated = [newGroup, ...recentGroups.filter(g => g.code !== data.code)].slice(0, 5);
+        localStorage.setItem('recent_groups', JSON.stringify(updated));
         navigate(`/group/${data.code}`);
       } else {
         toast.error(data.error);
@@ -62,12 +64,10 @@ const Home = () => {
     if (!joinCode || !userName) return toast.error('Rellena tu nombre y el código');
     const code = joinCode.toUpperCase();
     localStorage.setItem(`user_${code}`, userName);
-    localStorage.setItem('last_session', JSON.stringify({ code: code, name: 'Grupo Reciente', user: userName }));
+    const newGroup = { code, name: 'Grupo Reciente', user: userName };
+    const updated = [newGroup, ...recentGroups.filter(g => g.code !== code)].slice(0, 5);
+    localStorage.setItem('recent_groups', JSON.stringify(updated));
     navigate(`/group/${code}`);
-  };
-
-  const handleContinue = () => {
-    navigate(`/group/${lastGroup.code}`);
   };
 
   return (
@@ -103,24 +103,36 @@ const Home = () => {
       </header>
 
       <motion.div variants={itemVariants} className="luxury-card">
-        {lastGroup && !isJoining && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{ 
-              background: 'var(--bg-elevated)', padding: '1rem', borderRadius: '16px', 
-              marginBottom: '2rem', border: '1px solid var(--border-bright)',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between'
-            }}
-          >
-            <div>
-              <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>SESIÓN ACTIVA</p>
-              <p style={{ fontSize: '0.9rem', fontWeight: 700 }}>{lastGroup.name}</p>
+        {recentGroups.length > 0 && (
+          <div style={{ marginBottom: '2.5rem' }}>
+            <h4 style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '1px' }}>ACCESOS RÁPIDOS</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {recentGroups.slice(0, 3).map((group) => (
+                <motion.button
+                  key={group.code}
+                  whileHover={{ x: 5, background: 'rgba(255,255,255,0.05)' }}
+                  onClick={() => navigate(`/group/${group.code}`)}
+                  style={{ 
+                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '1rem', background: 'var(--bg-elevated)', borderRadius: '16px',
+                    border: '1px solid var(--border-bright)', textAlign: 'left'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ background: 'var(--primary)', padding: '8px', borderRadius: '10px' }}>
+                      <Users size={18} color="white" />
+                    </div>
+                    <div>
+                      <p style={{ fontSize: '0.9rem', fontWeight: 700, color: 'white', margin: 0 }}>{group.name}</p>
+                      <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', margin: 0 }}>Como {group.user}</p>
+                    </div>
+                  </div>
+                  <ArrowRight size={18} color="var(--primary)" />
+                </motion.button>
+              ))}
             </div>
-            <button onClick={handleContinue} className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
-              Continuar
-            </button>
-          </motion.div>
+            <div style={{ height: '1px', background: 'var(--border-subtle)', margin: '2rem 0' }}></div>
+          </div>
         )}
 
         <div style={{ 
