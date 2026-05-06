@@ -61,8 +61,47 @@ const Group = () => {
   };
 
   const handleDeleteExpense = (expenseId) => {
-    socket.emit('delete_expense', { code, expenseId });
-    toast.success('Gasto eliminado');
+    toast((t) => (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <p style={{ fontWeight: 700, color: 'white' }}>¿Eliminar este gasto?</p>
+        <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Esta acción no se puede deshacer.</p>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button
+            onClick={() => {
+              socket.emit('delete_expense', { code, expenseId });
+              toast.dismiss(t.id);
+              toast.success('Gasto eliminado');
+            }}
+            style={{
+              flex: 1, padding: '0.5rem', borderRadius: '10px',
+              background: '#ef4444', color: 'white', border: 'none',
+              fontWeight: 700, cursor: 'pointer'
+            }}
+          >
+            Eliminar
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{
+              flex: 1, padding: '0.5rem', borderRadius: '10px',
+              background: '#1f232d', color: 'white', border: '1px solid rgba(255,255,255,0.1)',
+              fontWeight: 700, cursor: 'pointer'
+            }}
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity,
+      style: {
+        background: '#161920',
+        border: '1px solid rgba(239, 68, 68, 0.3)',
+        borderRadius: '16px',
+        padding: '1rem',
+        maxWidth: '320px'
+      }
+    });
   };
 
   if (!group) return (

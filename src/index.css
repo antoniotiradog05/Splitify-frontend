@@ -20,6 +20,8 @@
   --danger: #ef4444;
   --success: #10b981;
   --warning: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
   
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
