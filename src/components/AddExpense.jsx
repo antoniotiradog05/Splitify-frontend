@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Euro, Check, CreditCard, Calendar, ArrowRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const AddExpense = ({ members, onClose, onAdd, currentUser, editData }) => {
   const [description, setDescription] = useState(editData ? editData.description : '');

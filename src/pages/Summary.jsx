@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Share2, CheckCircle, PieChart as PieIcon, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Share2, CheckCircle, TrendingUp, Send, MessageCircle } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import toast from 'react-hot-toast';
 
