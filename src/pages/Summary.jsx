@@ -125,6 +125,9 @@ const Summary = () => {
           {group.members.map(member => {
             const spent = group.expenses.filter(e => e.paidBy === member).reduce((acc, curr) => acc + curr.amount, 0);
             const shouldHavePaid = group.expenses.reduce((acc, curr) => {
+              if (curr.customAmounts && (curr.customAmounts instanceof Map ? curr.customAmounts.get(member) : curr.customAmounts[member])) {
+                return acc + (curr.customAmounts instanceof Map ? curr.customAmounts.get(member) : curr.customAmounts[member]);
+              }
               if (curr.splitAmong.includes(member)) {
                 return acc + (curr.amount / curr.splitAmong.length);
               }
@@ -144,6 +147,41 @@ const Summary = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Nueva sección: Resumen de Deudas */}
+        <div className="luxury-card" style={{ marginBottom: '1.5rem', background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+          <h4 style={{ fontSize: '0.8rem', color: 'var(--accent-rose)', marginBottom: '1rem', textTransform: 'uppercase', fontWeight: 800 }}>Deudas Pendientes</h4>
+          {group.members.map(member => {
+            const spent = group.expenses.filter(e => e.paidBy === member).reduce((acc, curr) => acc + curr.amount, 0);
+            const shouldHavePaid = group.expenses.reduce((acc, curr) => {
+              const custom = curr.customAmounts && (curr.customAmounts instanceof Map ? curr.customAmounts.get(member) : curr.customAmounts[member]);
+              if (custom) return acc + custom;
+              if (curr.splitAmong.includes(member)) return acc + (curr.amount / curr.splitAmong.length);
+              return acc;
+            }, 0);
+            const bal = spent - shouldHavePaid;
+
+            if (bal >= -0.01) return null; // No debe nada
+
+            return (
+              <div key={member} style={{ padding: '0.5rem 0', fontSize: '0.9rem' }}>
+                <span style={{ fontWeight: 700 }}>{member}</span>: <span style={{ color: 'var(--accent-rose)', fontWeight: 800 }}>debe {Math.abs(bal).toFixed(2)}€</span>
+              </div>
+            );
+          })}
+          {group.members.every(m => {
+            const spent = group.expenses.filter(e => e.paidBy === m).reduce((acc, curr) => acc + curr.amount, 0);
+            const shouldHavePaid = group.expenses.reduce((acc, curr) => {
+              const custom = curr.customAmounts && (curr.customAmounts instanceof Map ? curr.customAmounts.get(m) : curr.customAmounts[m]);
+              if (custom) return acc + custom;
+              if (curr.splitAmong.includes(m)) return acc + (curr.amount / curr.splitAmong.length);
+              return acc;
+            }, 0);
+            return (spent - shouldHavePaid) >= -0.01;
+          }) && (
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>No hay deudas pendientes en este momento.</p>
+          )}
         </div>
 
         <div className="luxury-card" style={{ borderTop: '4px solid var(--primary)', background: 'linear-gradient(to bottom, #1a1e26, #161920)' }}>
