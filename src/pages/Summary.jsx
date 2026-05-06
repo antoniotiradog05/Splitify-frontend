@@ -1,30 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Share2, CheckCircle, TrendingUp, Send, MessageCircle } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import toast from 'react-hot-toast';
 
-const socket = io(import.meta.env.VITE_API_URL);
-
 const Summary = () => {
   const { code } = useParams();
   const navigate = useNavigate();
+  const socketRef = useRef(null);
   const [group, setGroup] = useState(null);
   const [settlements, setSettlements] = useState([]);
   const [userName] = useState(localStorage.getItem(`user_${code}`));
 
   useEffect(() => {
-    socket.emit('join_group', { code, username: userName });
+    const socket = io(import.meta.env.VITE_API_URL, {
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionAttempts: 10,
+    });
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      socket.emit('join_group', { code, username: userName });
+    });
 
     socket.on('group_updated', ({ group, settlements }) => {
       setGroup(group);
       setSettlements(settlements);
     });
 
+    socket.on('error_message', (msg) => {
+      toast.error(msg || 'Ha ocurrido un error');
+    });
+
     return () => {
-      socket.off('group_updated');
+      socket.disconnect();
     };
   }, [code, userName]);
 
@@ -43,13 +55,18 @@ const Summary = () => {
   };
 
   const handleMarkAsPaid = (s) => {
+    const socket = socketRef.current;
+    if (!socket?.connected) {
+      toast.error('Sin conexión al servidor');
+      return;
+    }
     socket.emit('add_expense', {
       code,
       description: `Liquidación: ${s.from} ➔ ${s.to}`,
       amount: s.amount,
       paidBy: s.from,
       splitAmong: [s.to],
-      category: 'ocio' // Usamos ocio por ahora como fallback
+      category: 'ocio'
     });
     toast.success(`Pago de ${s.from} a ${s.to} registrado`);
   };
